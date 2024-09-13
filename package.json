@@ -1,0 +1,51 @@
+{
+  "name": "groovy",
+  "version": "1.0.0",
+  "description": "Groovy Task Management",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "lint": "eslint . --ext .js"
+  },
+  "author": "Parth V",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^5.0.2",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb-snapshot": "^1.4.1",
+    "mongoose": "^6.3.1",
+    "redis": "^4.7.0",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "eslint": "^8.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^12.4.1",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.6.2"
+  },
+  "lint-staged": {
+    "*.{js,json,css,scss,html,md}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}
