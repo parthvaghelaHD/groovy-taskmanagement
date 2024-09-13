@@ -18,7 +18,6 @@ const getConfig = () => {
         MONGO_PASSWORD: process.env.MONGO_PASSWORD || 'test',
         MONGO_DATABASE: process.env.MONGO_DATABASE || 'MyTaskApp',
         TOKEN_SECRET: process.env.TOKEN_SECRET || 'groovyTaskApp',
-        LIVE_URL: process.env.LIVE_URL || 'localhost:3001/',
         ENV: process.env.ENV || 'dev',
     };
 };
