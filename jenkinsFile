@@ -1,55 +1,50 @@
 pipeline {
     agent any
-    environment {
-        DEPLOY_PATH = './groovy-taskmanagement1'
+
+     environment {
+        NODE_HOME = '/usr/local/bin/node'
+        PATH = "${NODE_HOME}:${PATH}"
     }
+
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
                 git branch: 'feature/development', url: 'https://github.com/parthvaghelaHD/groovy-taskmanagement.git'
             }
         }
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                dir('/home/ubuntu/groovy/groovy-taskmanagement/') { 
+                    script {
+                        sh 'npm install'
+                    }
+                }
             }
         }
-        stage('Test') {
-            steps {
-                sh 'npm test' // Ensure your tests pass
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'npm run build' // Modify this if your build command differs
-            }
-        }
+        
         stage('Deploy') {
             steps {
-                script {
-                    // Copy files to the deployment path
-                    sh """
-                    rsync -av --exclude='.git' . ${DEPLOY_PATH}
-                    cd ${DEPLOY_PATH}
-                    npm install
-                    """
-
-                    // Start or restart the app with PM2
-                    sh """
-                    pm2 startOrRestart ecosystem.config.js || pm2 start src/app.js --name Groovy --watch
-                    pm2 save
-                    """
+                // Deploy the application using PM2
+                dir('/home/ubuntu/groovy/groovy-taskmanagement/') {
+                    script {
+                        sh 'pm2 stop groovy || true'
+                        sh 'pm2 start src/index.js --name groovy'
+                        sh 'pm2 save'
+                    }
                 }
             }
         }
     }
+
     post {
-        always {
-            // Archive logs or do other cleanup
-            echo 'Deployment completed.'
+        success {
+            echo 'Deployment was successful!'
         }
         failure {
-            echo 'Deployment failed.'
+            echo 'Deployment failed. Please check the logs for details.'
+        }
+        always {
+            cleanWs()
         }
     }
 }
