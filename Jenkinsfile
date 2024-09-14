@@ -14,32 +14,40 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                // Install the required npm packages
-                echo "Installing the packages"
-                sh 'npm install'
+                // Navigate to the project directory and install the required npm packages
+                echo "Navigating to project directory and installing packages"
+                dir('groovy-taskmanagement') {
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Run Tests and Benchmark') {
             steps {
+                // Navigate to the project directory and run the tests
                 echo "Running the benchmark"
-                sh 'npm run test'
+                dir('groovy-taskmanagement') {
+                    sh 'npm run test'
+                }
             }
         }
 
         stage('Check for PM2 process') {
             steps {
                 script {
-                    // Check if the PM2 process named 'groovy' is running
-                    def pm2List = sh(script: 'sudo pm2 list | grep groovy || true', returnStatus: true)
-                    if (pm2List == 0) {
-                        // If found, restart the PM2 process
-                        echo "Restarting the existing PM2 app: groovy"
-                        sh 'sudo pm2 restart groovy --update-env'
-                    } else {
-                        // If not found, start the app using npm run start with PM2
-                        echo "Starting a new PM2 app: groovy using npm run start"
-                        sh 'sudo pm2 start npm --name groovy -- run start'
+                    // Navigate to the project directory
+                    dir('groovy-taskmanagement') {
+                        // Check if the PM2 process named 'groovy' is running
+                        def pm2List = sh(script: 'sudo pm2 list | grep groovy || true', returnStatus: true)
+                        if (pm2List == 0) {
+                            // If found, restart the PM2 process
+                            echo "Restarting the existing PM2 app: groovy"
+                            sh 'sudo pm2 restart groovy --update-env'
+                        } else {
+                            // If not found, start the app using npm run start with PM2
+                            echo "Starting a new PM2 app: groovy using npm run start"
+                            sh 'sudo pm2 start npm --name groovy -- run start'
+                        }
                     }
                 }
             }
