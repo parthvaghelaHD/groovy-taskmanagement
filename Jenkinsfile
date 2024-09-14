@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         // Set the environment variable for the .env file if necessary
-        ENV_PATH = '/var/lib/docker/volumes/29e6c54aede009f506d631a6fb3faaa6293d6fd46561369c686563f2dd07844a/_data/workspace/Groovy-test/.env'
+        ENV_PATH = './env'
         NODE_ENV = 'development'
     }
     stages {
