@@ -15,9 +15,18 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 // Install the required npm packages
+                echo "Installing the packages"
                 sh 'npm install'
             }
         }
+
+        stage('Run Tests and Benchmark') {
+            steps {
+                echo "Running the benchmark"
+                sh 'npm run test'
+            }
+        }
+
         stage('Check for PM2 process') {
             steps {
                 script {
